@@ -6,6 +6,7 @@ namespace BankWeb.Services
     {
         public const string SECRET_ID = "";
         public const string SECRET_KEY = "";
+
         public static async Task<string> GetAccessToken(HttpClient httpClient)
         {
             using var request = new HttpRequestMessage(new HttpMethod("POST"), "https://ob.nordigen.com/api/v2/token/new/");

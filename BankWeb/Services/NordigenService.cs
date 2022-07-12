@@ -4,8 +4,10 @@ namespace BankWeb.Services
 {
     public static class NordigenService
     {
-        public const string SECRET_ID = "";
-        public const string SECRET_KEY = "";
+        // Get your access keys by creating a free user on https://nordigen.com
+        public const string SECRET_ID = FILL_IN_ID_HERE;
+        public const string SECRET_KEY = FILL_IN_KEY_HERE;
+
 
         public static async Task<string> GetAccessToken(HttpClient httpClient)
         {

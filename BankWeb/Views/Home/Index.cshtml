@@ -14,9 +14,12 @@
 <script>
     const fetchJson = url => fetch(url).then(response => response.json())
 
-    fetchJson("/Home/GetAccessToken").then(token =>
+    fetchJson("/Home/GetAccessToken").then(token => {
+        if (typeof token.access === 'undefined') {
+            alert(`${JSON.stringify(token)}\n\nFill in missing API keys in BankWeb/Services/NordigenService.cs`)
+        }
         fetchJson(`/Home/GetBanks?access_token=${token.access}`).then(WithListOfBanks)
-    )
+    })
 
     function WithListOfBanks(listOfBanks) {
         config = {

@@ -1,10 +1,9 @@
-using BankWeb.Controllers;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient<HomeController>();
+builder.Services.AddHttpClient<BankWeb.Controllers.HomeController>();
+builder.Services.AddSingleton<BankWeb.Services.NordigenService>();
 
 var app = builder.Build();
 

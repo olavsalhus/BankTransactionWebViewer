@@ -1,13 +1,15 @@
-﻿<link href="https://unpkg.com/nordigen-bank-ui@1.3.4/package/src/selector.min.css" rel="stylesheet" />
+﻿<!DOCTYPE html>
+<html lang="en" >
+<title>Transaction Viewer</title>
+<link href="https://unpkg.com/nordigen-bank-ui@1.3.4/package/src/selector.min.css" rel="stylesheet" />
 
-<a href="/Home/BankLogin?bank=SANDBOXFINANCE_SFIN0000" >DEMO bank (any login details accepted)</a>
-    <div class="institution-content-wrapper">
-        <div class="institution-modal-content">
-            <header class="institution-modal-header">
-                <h2>Select your bank:</h2>
-            </header>
-        </div>
+<div class="institution-content-wrapper">
+    <div class="institution-modal-content">
+        <header class="institution-modal-header">
+            <h2>Select your bank:</h2>
+        </header>
     </div>
+</div>
 
 <script src="https://unpkg.com/nordigen-bank-ui@1.3.4/package/src/selector.min.js"></script>
     
@@ -24,14 +26,14 @@
     function WithListOfBanks(listOfBanks) {
         config = {
             logoUrl: 'https://cdn.nordigen.com/ais/Nordigen_Logo_Black.svg',
-            text: 'Login to your bank to show transactions or use a ',
+            text: 'Login to your bank to show transactions or ',
             countryFilter: true
         };
 
         new institutionSelector(listOfBanks, 'institution-modal-content', config);
         var demoLink = document.createElement('a')
         demoLink.href = "/Home/BankLogin?bank=SANDBOXFINANCE_SFIN0000"
-        demoLink.innerText = "DEMO bank account";
+        demoLink.innerText = "use a DEMO bank account";
         document.querySelector('.container-onboarding p').appendChild(demoLink)
         const observer = new MutationObserver((event) => {
             const institutions = Array.from(document.querySelectorAll('.ob-list-institution > a'));

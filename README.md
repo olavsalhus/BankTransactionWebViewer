@@ -5,7 +5,7 @@ It uses Datatables to show transactions in the browser with ability to dowload t
 
 The bank transactions are not categorized (a premium version of the Nordigen API can provide this).
 ## Coding style
-I wanted to expermint with minimizing html boilerplate and see what would happen. For compability with all browser I recommend adding `<!DOCTYPE html>, <html>, <head> and <body>` (this is left as an exercise to the reader :) )
+I experimented with minimizing html boilerplate and the source code gets validated by validator.w3.org but its unconventional. Feel free to manually insert html, head and body tags.
 
 ## Getting started
 
@@ -13,7 +13,14 @@ You must provide your own secret API keys which you can get by creating a free u
 
 Visual Studio is recommended to build and test the project.
 
-Edit the file BankWeb/Services/NordigenService.cs to add your own SECRET_ID and SECRET_KEY. (using appsettings.json which is best practice is left as an exercise to the reader)
+Right click the project and click manage user secrets, add this into the file:
+`{
+  "Nordigen": {
+    "secret_id": "<SECRET_ID_GOES_HERE>",
+    "secret_key": "<SECRET_KEY_GOES_HERE>"
+  }
+}`
+
 
 You should be able to run the project from Visual studio. After logging in or using the DEMO account you should see the transactions.
 

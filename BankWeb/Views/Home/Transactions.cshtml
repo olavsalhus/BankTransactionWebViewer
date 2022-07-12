@@ -1,0 +1,84 @@
+﻿@model string
+<link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+<style>
+    table.dataTable thead > tr > th.sorting {
+        position: sticky;
+        top: 0;
+        background-color: white;
+    }
+
+    .loading-spinner {
+      border: 16px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 16px solid #3498db;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+    }
+
+    @@keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+</style>
+        
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+
+<div class="loading-spinner"></div>
+
+<table id="transactions-table" class="display" hidden style="width: 100%">
+    <thead>
+        <tr>
+            <th>Bokført dato</th><th>Konto</th><th>Beskrivelse</th><th>Mengde</th>
+            <th>Valuta</th><th>Rentedato</th><th>Debitor</th><th>Kreditor</th><th>Kreditor konto</th>
+        </tr>
+    </thead>
+</table>
+
+<script>
+    const jsonColumns = ['bookingDate', 'debtorAccount.bban', 'remittanceInformationUnstructured', 'transactionAmount.amount',
+                'transactionAmount.currency', 'valueDate', 'debtorName', 'creditorName', 'creditorAccount.bban']
+
+    const fetchJson = url => fetch(url).then(response => response.json())
+
+    fetchJson("/Home/GetAccessToken")
+        .then(token =>
+            fetchJson(`/Home/ListBankAccounts?reference=@Model&access_token=${token.access}`)
+                .then(ShowBankAccounts)
+        )
+
+    const ShowBankAccounts = bankAccounts => {
+        bankAccounts.forEach(account => {
+            var h2 = document.createElement('h2')
+            h2.textContent = `Konto: ${account.metadata.iban}, Balanse: ${account.balances[0].balanceAmount.amount} ${account.balances[0].balanceAmount.currency}`
+            h2.style.display = 'inline'
+
+            var clonedTable = document.querySelector("#transactions-table").cloneNode(true)
+            clonedTable.id = `${account.id}`
+            clonedTable.hidden = false
+
+            var details = document.createElement("details");
+            details.open = bankAccounts.length == 1
+            var summary = document.createElement("summary");
+            summary.style.cursor = 'pointer'
+            summary.appendChild(h2);
+
+            details.appendChild(summary);
+            details.appendChild(clonedTable);
+            document.body.appendChild(details);
+
+            var allTransactions = account.transactions.booked.concat(account.transactions.pending);
+
+            $(clonedTable).DataTable({
+                data: allTransactions, paging: false, fixedHeader: true, order: [0, 'desc'],
+                columns: jsonColumns.map(jsonColumn => ({ data: jsonColumn, defaultContent: '' }))
+            });
+        })
+
+        $(".loading-spinner").hide();
+    }
+
+    
+</script>

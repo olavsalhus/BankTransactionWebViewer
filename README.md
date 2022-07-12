@@ -13,7 +13,7 @@ Visual Studio is recommended to build and test the project.
 
 Edit the file BankWeb/Services/NordigenService.cs to add your own SECRET_ID and SECRET_KEY.
 
-You should be able to run the project from Visual studio. After logging or using the DEMO account in you should see the transactions.
+You should be able to run the project from Visual studio. After logging in or using the DEMO account in you should see the transactions.
 
 Note: Using the DEMO account does not require a username or password just click sign in with blank credentials.
 

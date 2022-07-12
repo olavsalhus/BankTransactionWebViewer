@@ -39,8 +39,8 @@
 <table id="transactions-table" class="display" hidden style="width: 100%">
     <thead>
         <tr>
-            <th>Bokført dato</th><th>Konto</th><th>Beskrivelse</th><th>Mengde</th>
-            <th>Valuta</th><th>Rentedato</th><th>Debitor</th><th>Kreditor</th><th>Kreditor konto</th>
+            <th>Booking date</th><th>Account</th><th>Description</th><th>Amount</th>
+            <th>Currency</th><th>Valuedate</th><th>Debtor</th><th>Creditor</th><th>Creditor account</th>
         </tr>
     </thead>
 </table>
@@ -60,7 +60,7 @@
     const ShowBankAccounts = bankAccounts => {
         bankAccounts.forEach(account => {
             var h2 = document.createElement('h2')
-            h2.textContent = `Konto: ${account.metadata.iban}, Balanse: ${account.balances[0].balanceAmount.amount} ${account.balances[0].balanceAmount.currency}`
+            h2.textContent = `Account: ${account.metadata.iban}, balance: ${account.balances[0].balanceAmount.amount} ${account.balances[0].balanceAmount.currency}`
             h2.style.display = 'inline'
 
             var clonedTable = document.querySelector("#transactions-table").cloneNode(true)
@@ -82,13 +82,13 @@
             $(clonedTable).DataTable({
                 data: allTransactions, paging: false, fixedHeader: true, order: [0, 'desc'],
                 columns: jsonColumns.map(jsonColumn => ({ data: jsonColumn, defaultContent: '' })),
-        dom: 'Bfrtip',
-        buttons: [
-            'copyHtml5',
-            'excelHtml5',
-            'csvHtml5',
-            'pdfHtml5'
-        ]
+                dom: 'Bfrtip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ]
             });
         })
 

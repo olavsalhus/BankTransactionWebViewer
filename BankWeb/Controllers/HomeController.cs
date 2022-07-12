@@ -34,7 +34,7 @@ namespace BankWeb.Controllers
                 $"institutions/{(string.IsNullOrWhiteSpace(country) ? "" : $"?country={country}")}"
                 , access_token), "application/json");
 
-        public IActionResult Transactions(string @ref) => View("Transactions", model: @ref);
+        public IActionResult Transactions(string @ref) => View(model: @ref);
 
         public async Task<ActionResult> ListBankAccounts(string reference, string access_token)
         {

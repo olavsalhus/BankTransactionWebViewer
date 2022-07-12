@@ -17,4 +17,4 @@ You should be able to run the project from Visual studio. After logging in or us
 
 Note: Using the DEMO account does not require a username or password just click sign in with blank credentials.
 
-![image](https://user-images.githubusercontent.com/59777181/178502171-672f3dcf-5dbc-4591-a4c4-efe2c4c5840b.png)
+![image](https://user-images.githubusercontent.com/59777181/178507969-f7d83da2-04e9-47c9-b15c-3441b84165fd.png)

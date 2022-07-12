@@ -11,7 +11,7 @@ You must provide your own secret API keys which you can get by creating a free u
 
 Visual Studio is recommended to build and test the project.
 
-Edit the file BankWeb/Services/NordigenService.cs to add your own SECRET_ID and SECRET_KEY.
+Edit the file BankWeb/Services/NordigenService.cs to add your own SECRET_ID and SECRET_KEY. (using appsettings.json which is best practice is left as an exercise to the reader)
 
 You should be able to run the project from Visual studio. After logging in or using the DEMO account you should see the transactions.
 

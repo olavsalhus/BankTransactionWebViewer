@@ -5,7 +5,7 @@ It uses Datatables to show transactions in the browser with ability to dowload t
 
 The bank transactions are not categorized (a premium version of the Nordigen API can provide this).
 ## Coding style
-I wanted to expermint with minimizing html boilerplate and see what would happen. For compability with all browser I recommend adding <doctype html>, <html>, <head> and <body> (this is left as an exercise to the reader :) )
+I wanted to expermint with minimizing html boilerplate and see what would happen. For compability with all browser I recommend adding `<!DOCTYPE html>, <html>, <head> and <body>` (this is left as an exercise to the reader :) )
 
 ## Getting started
 

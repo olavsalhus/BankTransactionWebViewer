@@ -3,9 +3,9 @@
 <html lang="en" >
 <title>Transaction Viewer</title>
 
+<link href="~/transactions.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css" rel="stylesheet" />
-<link href="~/transactions.css" rel="stylesheet" />
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
@@ -22,12 +22,9 @@
 
 <div id="loading-spinner"></div>
 
-
 <script>
-    const reference = '@Request.Query["ref"]'
-
     fetch("/GetAccessToken").then(response => response.json()).then(token =>
-        fetch(`/ListBankAccounts?reference=${reference}&access_token=${token.access}`).then(response => response.json())
+        fetch(`/ListBankAccounts?reference=@Request.Query["ref"]&access_token=${token.access}`).then(response => response.json())
         .then(ShowBankAccounts)
     )
 
@@ -72,7 +69,8 @@
                     { extend: 'copy', title },
                     { extend: 'excel', filename, title },
                     { extend: 'csv', filename, title: null },
-                    { extend: 'pdf', filename, title }]
+                    { extend: 'pdf', filename, title }
+                ]
             });
         })
 

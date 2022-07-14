@@ -8,13 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\New folder\**" />
-    <Content Remove="wwwroot\New folder\**" />
-    <EmbeddedResource Remove="wwwroot\New folder\**" />
-    <None Remove="wwwroot\New folder\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

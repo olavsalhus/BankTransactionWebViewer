@@ -1,4 +1,4 @@
-﻿@model string
+﻿@page
 <!DOCTYPE html>
 <html lang="en" >
 <title>Transaction Viewer</title>
@@ -58,10 +58,11 @@
                          'transactionAmount.currency', 'valueDate', 'debtorName', 'creditorName', 'creditorAccount.bban']
 
     const fetchJson = url => fetch(url).then(response => response.json())
+    const reference = '@Request.Query["ref"]'
 
-    fetchJson("/Home/GetAccessToken")
+    fetchJson("/GetAccessToken")
         .then(token =>
-            fetchJson(`/Home/ListBankAccounts?reference=@Model&access_token=${token.access}`).then(ShowBankAccounts)
+            fetchJson(`/ListBankAccounts?reference=${reference}&access_token=${token.access}`).then(ShowBankAccounts)
         )
 
     const ShowBankAccounts = bankAccounts => {

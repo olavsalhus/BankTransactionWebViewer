@@ -1,28 +1,27 @@
 using System.Text.Json.Nodes;
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddHttpClient().AddSingleton<NordigenService>().AddRazorPages();
 
 var app = builder.Build();
 
+#region Minimal API
 app.MapGet("GetAccessToken", async (HttpContext ctx, IHttpClientFactory httpClientFactory, NordigenService _nordigenService) =>
-    await ctx.Response.WriteAsync(await _nordigenService.GetAccessToken(httpClientFactory.CreateClient()))
+    await ctx.Response.WriteAsync(await _nordigenService.GetAccessToken(httpClientFactory))
 );
-
-app.MapGet("BankLogin", async (HttpContext ctx, IHttpClientFactory httpClientFactory, NordigenService _nordigenService, string? bank) =>
-{
-    var httpClient = httpClientFactory.CreateClient();
-    var token = JsonNode.Parse(await _nordigenService.GetAccessToken(httpClient));
-    var redirectUrl = $"{ctx.Request.Scheme}://{ctx.Request.Host}/Transactions";
-    
-    var requisition = await _nordigenService.GetRequisition(httpClient, token?["access"]?.ToString()!, redirectUrl, bank!);
-    ctx.Response.Redirect(JsonNode.Parse(requisition)?["link"]?.ToString()!);
-});
 
 app.MapGet("GetBanks", async (HttpContext ctx, IHttpClientFactory httpClientFactory, NordigenService _nordigenService, string? country, string? access_token) =>
     await ctx.Response.WriteAsync(await Get($"institutions/?country={country}", access_token!, httpClientFactory))
 );
+
+app.MapGet("BankLogin", async (HttpContext ctx, IHttpClientFactory httpClientFactory, NordigenService _nordigenService, string? bank) =>
+{
+    var token = JsonNode.Parse(await _nordigenService.GetAccessToken(httpClientFactory));
+    var redirectUrl = $"{ctx.Request.Scheme}://{ctx.Request.Host}/Transactions";
+    
+    var requisition = await _nordigenService.GetRequisition(httpClientFactory, token?["access"]?.ToString()!, redirectUrl, bank!);
+    ctx.Response.Redirect(JsonNode.Parse(requisition)?["link"]?.ToString()!);
+});
 
 app.MapGet("ListBankAccounts", async (HttpContext ctx, IHttpClientFactory httpClientFactory, string? reference, string? access_token) =>
 {
@@ -47,7 +46,10 @@ app.MapGet("ListBankAccounts", async (HttpContext ctx, IHttpClientFactory httpCl
 
     await ctx.Response.WriteAsync(@$"[{string.Join(", ", accountObjects)}]");
 });
+#endregion
 
+app.UseStaticFiles();
+app.UseHsts();
 app.MapRazorPages();
 app.Run();
 

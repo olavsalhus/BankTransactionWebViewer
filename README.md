@@ -1,5 +1,5 @@
 # NordigenApiTest
-This is an ASP.NET MVC project that shows bank transactions from multiple banks using Nordigen transactions API.
+This is an ASP.NET Web project that shows bank transactions from multiple banks using Nordigen transactions API.
 
 It uses Datatables to show transactions in the browser with ability to dowload the data as Excel/CSV/PDF.
 

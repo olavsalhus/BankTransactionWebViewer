@@ -36,13 +36,12 @@
     const jsonColumns = ['bookingDate', 'debtorAccount.bban', 'remittanceInformationUnstructured', 'transactionAmount.amount',
                          'transactionAmount.currency', 'valueDate', 'debtorName', 'creditorName', 'creditorAccount.bban']
 
-    const fetchJson = url => fetch(url).then(response => response.json())
     const reference = '@Request.Query["ref"]'
 
-    fetchJson("/GetAccessToken")
-        .then(token =>
-            fetchJson(`/ListBankAccounts?reference=${reference}&access_token=${token.access}`).then(ShowBankAccounts)
-        )
+    fetch("/GetAccessToken").then(response => response.json()).then(token =>
+        fetch(`/ListBankAccounts?reference=${reference}&access_token=${token.access}`).then(response => response.json())
+        .then(ShowBankAccounts)
+    )
 
     const ShowBankAccounts = bankAccounts => {
         bankAccounts.forEach(account => {

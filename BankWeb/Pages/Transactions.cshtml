@@ -20,22 +20,10 @@
 
 <a style="float: right; font-size: x-large" href="/" ><button class="dt-button">Log out</button></a>
 
-<div class="loading-spinner"></div>
-
-<table id="transactions-table" class="display" hidden style="width: 100%">
-    <thead>
-        <tr>
-            <th>Booking date</th><th>Account</th><th>Description</th><th>Amount</th>
-            <th>Currency</th><th>Valuedate</th><th>Debtor</th><th>Creditor</th><th>Creditor account</th>
-        </tr>
-    </thead>
-</table>
+<div id="loading-spinner"></div>
 
 
 <script>
-    const jsonColumns = ['bookingDate', 'debtorAccount.bban', 'remittanceInformationUnstructured', 'transactionAmount.amount',
-                         'transactionAmount.currency', 'valueDate', 'debtorName', 'creditorName', 'creditorAccount.bban']
-
     const reference = '@Request.Query["ref"]'
 
     fetch("/GetAccessToken").then(response => response.json()).then(token =>
@@ -43,36 +31,51 @@
         .then(ShowBankAccounts)
     )
 
+    const columns = [
+        { text: 'Booking date', path: 'bookingDate' },
+        { text: 'Account', path: 'debtorAccount.bban' },
+        { text: 'Description', path: 'remittanceInformationUnstructured' },
+        { text: 'Amount', path: 'transactionAmount.amount' },
+        { text: 'Currency', path: 'transactionAmount.currency' },
+        { text: 'Valuedate', path: 'valueDate' },
+        { text: 'Debtor', path: 'debtorName' },
+        { text: 'Creditor', path: 'creditorName' },
+        { text: 'Creditor account', path: 'creditorAccount.bban' }
+    ]
+
     const ShowBankAccounts = bankAccounts => {
         bankAccounts.forEach(account => {
-            var h2 = document.createElement('h2')
-            h2.textContent = `Account: ${account.metadata.iban}, balance: ${account.balances[0].balanceAmount.amount} ${account.balances[0].balanceAmount.currency}`
-            h2.style.display = 'inline'
-
-            var clonedTable = document.querySelector("#transactions-table").cloneNode(true)
-            clonedTable.id = `${account.id}`
-            clonedTable.hidden = false
-
+            const title = `Account: ${account.metadata.iban}, balance: ${account.balances[0].balanceAmount.amount} ${account.balances[0].balanceAmount.currency}`
             var details = document.createElement("details");
             details.open = bankAccounts.length == 1
-            var summary = document.createElement("summary");
-            summary.style.cursor = 'pointer'
-            summary.appendChild(h2);
+            details.innerHTML = `
+                <summary style="cursor: pointer;">
+                    <h2 style="display: inline;">${title}</h2>
+                </summary>
+                <table id="${account.id}" class="display" style="width: 100%">
+                    <thead>
+                        <tr>
+                            ${columns.map(column => `<th>${column.text}</th>`).join('')}
+                        </tr>
+                    </thead>
+                </table>`
 
-            details.appendChild(summary);
-            details.appendChild(clonedTable);
             document.body.appendChild(details);
 
             var allTransactions = account.transactions.booked.concat(account.transactions.pending);
-
-            $(clonedTable).DataTable({
+            const filename = `transactions-${account.metadata.iban}`
+            new DataTable(`#${account.id}`, {
                 data: allTransactions, paging: false, order: [0, 'desc'],
-                columns: jsonColumns.map(jsonColumn => ({ data: jsonColumn, defaultContent: '' })),
+                columns: columns.map(column => ({ data: column.path, defaultContent: '' })),
                 dom: 'Bfrtip',
-                buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
+                buttons: [
+                    { extend: 'copy', title },
+                    { extend: 'excel', filename, title },
+                    { extend: 'csv', filename, title: null },
+                    { extend: 'pdf', filename, title }]
             });
         })
 
-        $(".loading-spinner").hide();
+        document.querySelector("#loading-spinner").remove();
     }
 </script>

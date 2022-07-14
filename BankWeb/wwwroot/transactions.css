@@ -1,4 +1,5 @@
-﻿table.dataTable thead > tr > th.sorting {
+﻿/* Sticky table header */
+table.dataTable thead > tr > th.sorting {
     position: sticky;
     top: 0;
     background-color: white;

@@ -23,24 +23,22 @@
     })
 
     function WithListOfBanks(listOfBanks) {
-        config = {
-            logoUrl: 'https://cdn.nordigen.com/ais/Nordigen_Logo_Black.svg',
-            text: 'Login to your bank to show transactions or ',
-            countryFilter: true
-        };
+        var [text, linkText] = ['Login to your bank to show transactions or ', "use a DEMO bank account"]
 
-        new institutionSelector(listOfBanks, 'institution-modal-content', config);
+        config = { logoUrl: 'https://cdn.nordigen.com/ais/Nordigen_Logo_Black.svg', text, countryFilter: true }
+
+        new institutionSelector(listOfBanks, 'institution-modal-content', config)
         var demoLink = document.createElement('a')
         demoLink.href = "/BankLogin?bank=SANDBOXFINANCE_SFIN0000"
-        demoLink.innerText = "use a DEMO bank account";
+        demoLink.innerText = linkText
         document.querySelector('.container-onboarding p').appendChild(demoLink)
         const observer = new MutationObserver((event) => {
-            const institutions = Array.from(document.querySelectorAll('.ob-list-institution > a'));
+            const institutions = Array.from(document.querySelectorAll('.ob-list-institution > a'))
             institutions.forEach((institution) => {
                 institution.href = `/BankLogin?bank=${institution.dataset.institution}`
             })
         });
 
-        observer.observe(document.querySelector(".institution-container"), { childList: true });
+        observer.observe(document.querySelector(".institution-container"), { childList: true })
     }
 </script>

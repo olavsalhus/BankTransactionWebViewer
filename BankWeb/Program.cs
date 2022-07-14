@@ -52,8 +52,7 @@ app.MapGet("ListBankAccounts", async (HttpContext ctx, IHttpClientFactory httpCl
 });
 #endregion
 
-app.UseStaticFiles();
-app.UseHsts();
+app.UseStaticFiles().UseHsts();
 app.MapRazorPages();
 app.Run();
 
@@ -69,8 +68,7 @@ static async Task<string> GetAccessToken(IHttpClientFactory httpClientFactory, I
 {
     using var request = new HttpRequestMessage(HttpMethod.Post, "https://ob.nordigen.com/api/v2/token/new/");
 
-    request.Content = JsonContent.Create(new
-    {
+    request.Content = JsonContent.Create(new {
         secret_id = configuration["Nordigen:secret_id"],
         secret_key = configuration["Nordigen:secret_key"]
     });

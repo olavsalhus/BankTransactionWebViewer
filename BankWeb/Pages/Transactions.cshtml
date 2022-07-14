@@ -4,19 +4,28 @@
 <title>Transaction Viewer</title>
 
 <link href="~/transactions.css" rel="stylesheet" />
+
+<!--Datatables core -->
 <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css" rel="stylesheet" />
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 
-<!-- Used for file exports -->
+<!-- Datatables extension: Column reordering -->
+<link href="https://cdn.datatables.net/colreorder/1.5.6/css/colReorder.dataTables.min.css" rel="stylesheet" />
+<script src="https://cdn.datatables.net/colreorder/1.5.6/js/dataTables.colReorder.min.js"></script>
+
+<!-- Datatables extension: File exports -->
 <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+
+<!-- Datatables extension: Responsive -->
+<link href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css" rel="stylesheet" />
+<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
 
 <a style="float: right; font-size: x-large" href="/" ><button class="dt-button">Log out</button></a>
 
@@ -59,10 +68,10 @@
 
             document.body.appendChild(details);
 
-            var allTransactions = account.transactions.booked.concat(account.transactions.pending);
+            var allTransactions = [...account.transactions.booked, ...account.transactions.pending];
             const filename = `transactions-${account.metadata.iban}`
             new DataTable(`#${account.id}`, {
-                data: allTransactions, paging: false, order: [0, 'desc'],
+                data: allTransactions, paging: false, order: [[0, 'desc']], responsive: true, colReorder: { realtime: false },
                 columns: columns.map(column => ({ data: column.path, defaultContent: '' })),
                 dom: 'Bfrtip',
                 buttons: [

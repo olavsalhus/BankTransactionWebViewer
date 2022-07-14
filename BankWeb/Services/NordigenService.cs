@@ -1,4 +1,4 @@
-﻿    public class NordigenService
+﻿public class NordigenService
 {
     private readonly IConfiguration Configuration;
     public NordigenService(IConfiguration configuration)

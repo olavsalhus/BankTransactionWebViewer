@@ -18,10 +18,11 @@ app.MapGet("BankLogin", async (HttpContext ctx, IHttpClientFactory httpClientFac
 {
     var token = JsonNode.Parse(await GetAccessToken(httpClientFactory, configuration));
     var redirect = $"{ctx.Request.Scheme}://{ctx.Request.Host}/Transactions";
-    using var request = new HttpRequestMessage(HttpMethod.Post, "https://ob.nordigen.com/api/v2/requisitions/");
-
-    request.Content = JsonContent.Create(new { redirect, institution_id = bank, user_language = "EN" });
-    request.Headers.Add("Authorization", $"Bearer {token?["access"]!}");
+    using var request = new HttpRequestMessage(HttpMethod.Post, "https://ob.nordigen.com/api/v2/requisitions/")
+    {
+        Headers = { { "Authorization", $"Bearer {token?["access"]!}" } },
+        Content = JsonContent.Create(new { redirect, institution_id = bank, user_language = "EN" })
+    };
 
     var requisition = await (await httpClientFactory.CreateClient().SendAsync(request)).Content.ReadAsStringAsync();
     ctx.Response.Redirect(JsonNode.Parse(requisition)?["link"]?.ToString()!);
@@ -58,20 +59,23 @@ app.Run();
 
 static async Task<string> Get(string url, string access_token, IHttpClientFactory httpClientFactory)
 {
-    using var request = new HttpRequestMessage(HttpMethod.Get, $"https://ob.nordigen.com/api/v2/{url}");
-    request.Headers.Add("Authorization", $"Bearer {access_token}");
+    using var request = new HttpRequestMessage(HttpMethod.Get, $"https://ob.nordigen.com/api/v2/{url}")
+    {
+        Headers = { { "Authorization", $"Bearer {access_token}" } }
+    };
 
     return await (await httpClientFactory.CreateClient().SendAsync(request)).Content.ReadAsStringAsync();
 }
 
 static async Task<string> GetAccessToken(IHttpClientFactory httpClientFactory, IConfiguration configuration)
 {
-    using var request = new HttpRequestMessage(HttpMethod.Post, "https://ob.nordigen.com/api/v2/token/new/");
-
-    request.Content = JsonContent.Create(new {
-        secret_id = configuration["Nordigen:secret_id"],
-        secret_key = configuration["Nordigen:secret_key"]
-    });
+    using var request = new HttpRequestMessage(HttpMethod.Post, "https://ob.nordigen.com/api/v2/token/new/")
+    {
+        Content = JsonContent.Create(new {
+            secret_id = configuration["Nordigen:secret_id"],
+            secret_key = configuration["Nordigen:secret_key"]
+        })
+    };
 
     return await (await httpClientFactory.CreateClient().SendAsync(request)).Content.ReadAsStringAsync();
 }

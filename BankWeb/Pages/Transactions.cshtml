@@ -43,7 +43,7 @@
         .then(ShowBankAccounts)
     )
 
-    const ToggleToolTip = (button) =>
+    const CreateToolTipIfNeeded = (button) =>
         button._tippy ?? tippy(button, {
             content: (reference) => `<pre><code>${unescape(reference.dataset.json)}</code></pre>`,
             allowHTML: true, maxWidth: 1000, trigger: 'click', interactive: true,
@@ -54,7 +54,7 @@
     const columns = [
         { text: 'Booking date', path: 'bookingDate' },
         { text: 'JSON', render: (data, type, row, meta) =>
-            `<button class='tippy' onclick='ToggleToolTip(this)' data-json='${escape(JSON.stringify(row, null, 2))}'>JSON</button>`
+            `<button class='tippy' onclick='CreateToolTipIfNeeded(this)' data-json='${escape(JSON.stringify(row, null, 2))}'>JSON</button>`
         },
         { text: 'BBAN', path: 'debtorAccount.bban' },
         { text: 'IBAN', path: 'debtorAccount.iban' },
